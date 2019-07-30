@@ -2,6 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import FitFind from './fitfind';
+import FitFinder from './fitfinder';
 
-ReactDOM.render(<FitFind />, document.querySelector('#root'));
+ReactDOM.render(<FitFinder />, document.querySelector('#root'));
