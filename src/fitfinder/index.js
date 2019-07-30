@@ -1,9 +1,14 @@
 import React from 'react';
 
+import Map from './map';
+import { grey } from 'ansi-colors';
+
 const FitFinder = () => {
+  console.log(process.env.REACT_APP_MAPS_API_KEY);
   return (
     <div className="container">
       <h1 className="display-4">FitFinder</h1>
+      <hr style={{ color: grey, backgroundColor: grey, height: 5}} />
       <div className="row">
         <div className="col-sm-4">
           <div className="">
@@ -42,7 +47,9 @@ const FitFinder = () => {
             </div>
 
         </div>
-        <div className="col-sm-8"></div>
+        <div className="col-sm-8 map-div">
+          <Map />
+        </div>
       </div>
     </div>
   );
