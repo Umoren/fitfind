@@ -1,14 +1,24 @@
 import React from 'react';
-import { Map, GoogleApiWrapper } from 'google-maps-react';
+import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 
 const MapContainer = props => {
   return (
     <Map
       google={props.google}
-      zoom={8}
+      zoom={12}
       style={mapStyles}
-      initialCenter={{ lat: 47.444, lng: -122.176 }}
-    />
+      initialCenter={{ lat: 5.617750669708498, lng: -0.177871130291502 }}
+    >
+      {
+        props.places.map(place => (
+          <Marker
+            key={place.id}
+            title={place.title}
+            position={place.position}
+          />
+        ))
+      }
+    </Map>
   );
 }
  

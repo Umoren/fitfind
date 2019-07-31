@@ -3,8 +3,11 @@ import React from 'react';
 import Map from './map';
 import { grey } from 'ansi-colors';
 
+import places from '../utils/generate-places';
+
+console.log('places', places);
+
 const FitFinder = () => {
-  console.log(process.env.REACT_APP_MAPS_API_KEY);
   return (
     <div className="container">
       <h1 className="display-4">FitFinder</h1>
@@ -44,11 +47,12 @@ const FitFinder = () => {
 
           <div className="mt-4">
             <h4>Results</h4>
+            
             </div>
 
         </div>
         <div className="col-sm-8 map-div">
-          <Map />
+          <Map places={places} />
         </div>
       </div>
     </div>
