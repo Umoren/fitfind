@@ -7,9 +7,10 @@ const places = demoCentres.map((place, index) => {
     id: index,
     title: `Center ${String.fromCharCode(65 + index)}`,
     position: { lat: place.lat, lng: place.lng },
-    hasPool: Math.random() >= 0.5,
-    hasGym: Math.random() >= 0.5,
-    hasTennis: Math.random() >= 0.5
+    hasSwimmingPool: Math.random() >= 0.5,
+    hasGym: true,
+    hasTennisCourt: Math.random() >= 0.5,
+    address: `${String.fromCharCode(49 + index)} Test Street, Westerof`
   }
 });
 
