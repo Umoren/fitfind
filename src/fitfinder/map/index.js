@@ -2,10 +2,37 @@ import React from 'react';
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 
 const MapContainer = props => {
-  if (props.place) {
+  const { google, location } = props;
+
+  if (props.search) {
+    const onMapReady = (mapProps, map) => {
+      console.log('mpaProps', mapProps, '\nmap', map)
+      searchLocation(map, map.center);
+    }
+
+    function searchLocation (map, center) {
+      const service = new google.maps.places.PlacesService(map);
+      service.textSearch({
+        query: 'Uyo',
+           
+      }, (result, status) => {
+          console.log('result', result[0].geometry.location);
+          console.log('status', status);
+      });
+    }
+
+
     return (
       <Map
-        google={props.google}
+        google={google}
+        onReady={onMapReady}
+      />
+    )
+  }
+  else if (props.place) {
+    return (
+      <Map
+        google={google}
         zoom={11}
         style={mapStyles}
       >
@@ -21,16 +48,25 @@ const MapContainer = props => {
         </InfoWindow>
       </Map>
     ); 
+  } else if (location && !props.places) {
+    return (
+      <Map
+        google={props.google}
+        zoom={11}
+        style={mapStyles}
+        initialCenter={location}
+      >
+      </Map>
+    );
   } else {
     return (
       <Map
         google={props.google}
         zoom={11}
         style={mapStyles}
-        initialCenter={{ lat: 5.617750669708498, lng: -0.177871130291502 }}
+        initialCenter={location}
       >
         {
-        
           props.places.map(place => (
             <Marker
               key={place.id}
@@ -38,7 +74,6 @@ const MapContainer = props => {
               position={place.position}
             />
           ))
-          
         }
       </Map>
     );

@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Map from './map';
 import { grey } from 'ansi-colors';
 import generateCentres from '../utils/generate-centres';
 
 const FitFinder = () => {
-  const [places, setPlaces] = useState(generateCentres({ lat: 5.617750669708498, lng: -0.177871130291502 }))
+  const [locationInput, setLocationInput] = useState('');
+  const [location, setLocation] = useState(null);
+  const [places, setPlaces] = useState(null);
   const [fitnessCentres, setFitnessCentres] = useState(places);
   const [filters, setFilters] = useState({
     hasGym: true,
@@ -12,6 +14,23 @@ const FitFinder = () => {
     hasTennisCourt: false
   });
   const [fitnessCentre, setFitnessCentre] = useState(null);
+
+  useEffect(() => {
+    if (navigator && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        const location = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        };
+        // console.log('browser location', location);
+        setLocation(location);
+        // const places = generateCentres(location);
+        // console.log('browser places', places);
+        // setPlaces(places);
+        // setFitnessCentres(places);
+      })
+    }
+  }, []);
 
   const handleFilter = e => {
     setFilters({
@@ -30,8 +49,18 @@ const FitFinder = () => {
 
   const handleCentreSelection = id => {
     const place = places.find(place => place.id === id);
-    console.log('id', id, '\nplace', place);
     setFitnessCentre(place);
+  }
+
+  const handleLocationInput = e => {
+    e.preventDefault();
+    setLocationInput(e.target.value);
+  }
+
+  const handleLocationSearch = () => {
+    const places = generateCentres(location);
+    setPlaces(places);
+    setFitnessCentres(places);
   }
 
   return (
@@ -43,9 +72,9 @@ const FitFinder = () => {
           <div className="">
             <label htmlFor="search" className="">Search by location</label>
             <div className="form-inline">
-            <input type="text" className="form-control w-50 mr-2" id="search" placeholder="Enter location" />
+            <input type="text" className="form-control w-50 mr-2" id="search" placeholder="Enter location" onChange={handleLocationInput} />
   
-              <button className="btn btn-primary btn-sm">Use location</button>
+              <button className="btn btn-primary btn-sm" onClick={() => handleLocationSearch()}>Use location</button>
               </div>
           </div>
           
@@ -72,26 +101,35 @@ const FitFinder = () => {
           </div>
 
           <div className="mt-4">
-            <h4>Results</h4>
             {
-              fitnessCentres.map(place => (
-                <div className="card mb-2" style={{ width: "18rem" }} key={place.id}>
-                  <div className="card-body" onClick={() => handleCentreSelection(place.id)}>
-                    <h5 className="card-title">{place.title}</h5>
-                    <p className="card-text">{place.address}</p>
-                    <p className="card-text small text-muted">{`${place.hasGym ? 'Gym ' : ''}${place.hasSwimmingPool ? '| Swimming pool ' : ''}${place.hasTennisCourt ? '| Tennis court' : ''}`}</p>
-                  </div>
-                </div>
-              ))
+              fitnessCentres ? <div>
+                <h4>Results</h4>
+                {
+                  fitnessCentres.map(place => (
+                    <div className="card mb-2" style={{ width: "18rem" }} key={place.id}>
+                      <div className="card-body" onClick={() => handleCentreSelection(place.id)}>
+                        <h5 className="card-title">{place.title}</h5>
+                        <p className="card-text">{place.address}</p>
+                        <p className="card-text small text-muted">{`${place.hasGym ? 'Gym ' : ''}${place.hasSwimmingPool ? '| Swimming pool ' : ''}${place.hasTennisCourt ? '| Tennis court' : ''}`}</p>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div> : ''
             }
+            
             </div>
 
         </div>
         <div className="col-sm-8 map-div">
-          <Map
-            places={fitnessCentres}
-            place={fitnessCentre}
-          />
+          {
+            location ? <Map
+              places={fitnessCentres}
+              place={fitnessCentre}
+              location={location}
+            // search={{input: 'Accra'}}
+            /> : <p className="lead">Map will load here...</p>
+          }
         </div>
       </div>
     </div>
