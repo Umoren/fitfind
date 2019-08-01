@@ -1,25 +1,48 @@
 import React from 'react';
-import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 
 const MapContainer = props => {
-  return (
-    <Map
-      google={props.google}
-      zoom={11}
-      style={mapStyles}
-      initialCenter={{ lat: 5.617750669708498, lng: -0.177871130291502 }}
-    >
-      {
-        props.places.map(place => (
-          <Marker
-            key={place.id}
-            title={place.title}
-            position={place.position}
-          />
-        ))
-      }
-    </Map>
-  );
+  if (props.place) {
+    return (
+      <Map
+        google={props.google}
+        zoom={11}
+        style={mapStyles}
+      >
+        <InfoWindow
+          position={props.place.position}
+          visible={true}
+        >
+          <div>
+            <h5>{props.place.title}</h5>
+            <p>{props.place.address}</p>
+            <p className="small text-muted">{`${props.place.hasGym ? 'Gym ' : ''}${props.place.hasSwimmingPool ? '| Swimming pool ' : ''}${props.place.hasTennisCourt ? '| Tennis court' : ''}`}</p>
+          </div>
+        </InfoWindow>
+      </Map>
+    ); 
+  } else {
+    return (
+      <Map
+        google={props.google}
+        zoom={11}
+        style={mapStyles}
+        initialCenter={{ lat: 5.617750669708498, lng: -0.177871130291502 }}
+      >
+        {
+        
+          props.places.map(place => (
+            <Marker
+              key={place.id}
+              title={place.title}
+              position={place.position}
+            />
+          ))
+          
+        }
+      </Map>
+    );
+  }
 }
  
 const mapStyles = {
