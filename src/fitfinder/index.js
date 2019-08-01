@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import Map from './map';
 import { grey } from 'ansi-colors';
-import places from '../utils/generate-places';
+import generateCentres from '../utils/generate-centres';
 
 const FitFinder = () => {
+  const [places, setPlaces] = useState(generateCentres({ lat: 5.617750669708498, lng: -0.177871130291502 }))
   const [fitnessCentres, setFitnessCentres] = useState(places);
   const [filters, setFilters] = useState({
     hasGym: true,
