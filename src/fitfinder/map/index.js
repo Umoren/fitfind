@@ -3,7 +3,7 @@ import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 
 const MapContainer = props => {
   const { google, location } = props;
-
+  // Testing for when search is implemented
   if (props.search) {
     const onMapReady = (mapProps, map) => {
       console.log('mpaProps', mapProps, '\nmap', map)
@@ -29,6 +29,7 @@ const MapContainer = props => {
       />
     )
   }
+  // When user has selected a single place
   else if (props.place) {
     return (
       <Map
@@ -48,7 +49,9 @@ const MapContainer = props => {
         </InfoWindow>
       </Map>
     ); 
-  } else if (location && !props.places) {
+  }
+  // When user has not yet searched for a place
+  else if (location && !props.places) {
     return (
       <Map
         google={props.google}
@@ -58,7 +61,9 @@ const MapContainer = props => {
       >
       </Map>
     );
-  } else {
+  }
+    // When user is searching for centres
+  else {
     return (
       <Map
         google={props.google}
@@ -79,7 +84,8 @@ const MapContainer = props => {
     );
   }
 }
- 
+
+// Ensure map fits into parent div 
 const mapStyles = {
   width: '100%',
   height: '100%',

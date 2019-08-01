@@ -1,37 +1,51 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Map from './map';
 import { grey } from 'ansi-colors';
 import generateCentres from '../utils/generate-centres';
 
 const FitFinder = () => {
+  // Hold location input in state
   const [locationInput, setLocationInput] = useState('');
+  // Hold location result in state 
   const [location, setLocation] = useState(null);
+  // Hold generated places in state
   const [places, setPlaces] = useState(null);
+  // Hold generated fitness centres in state
   const [fitnessCentres, setFitnessCentres] = useState(places);
+  // Hold filter conditions in state
   const [filters, setFilters] = useState({
     hasGym: true,
     hasSwimmingPool: false,
     hasTennisCourt: false
   });
+  // Hold selected fitness centre in state
   const [fitnessCentre, setFitnessCentre] = useState(null);
 
+  // On component load, 
   useEffect(() => {
+    // check if browser has navigator api
     if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
+        // Get location from browser
         const location = {
           lat: pos.coords.latitude,
           lng: pos.coords.longitude
         };
-        // console.log('browser location', location);
+        // Update location state
         setLocation(location);
-        // const places = generateCentres(location);
-        // console.log('browser places', places);
-        // setPlaces(places);
-        // setFitnessCentres(places);
       })
+    } else {
+      // Browser does not support navigation
+      // Set custom location (Accra Mall)
+      const location = {
+        lat: 5.622307,
+        lng: -0.173286
+      };
+      setLocation(location);
     }
   }, []);
 
+  // Handle filter input checkbox changes
   const handleFilter = e => {
     setFilters({
       ...filters,
@@ -40,6 +54,7 @@ const FitFinder = () => {
     filterPlaces();
   }
 
+  // Filter places when filter conditions change
   const filterPlaces = () => {
     const filteredCentres = places.filter(place => {
       return place.hasGym === filters.hasGym && place.hasSwimmingPool === filters.hasSwimmingPool && place.hasTennisCourt === filters.hasTennisCourt
@@ -47,17 +62,21 @@ const FitFinder = () => {
     setFitnessCentres(filteredCentres);
   }
 
+  // Handle fitness centre selection
   const handleCentreSelection = id => {
     const place = places.find(place => place.id === id);
     setFitnessCentre(place);
   }
 
+  // Handle location input - to save in state
   const handleLocationInput = e => {
     e.preventDefault();
     setLocationInput(e.target.value);
   }
 
+  // Handle location search on button click
   const handleLocationSearch = () => {
+    // Generate ten dummy places within 10miles of current location
     const places = generateCentres(location);
     setPlaces(places);
     setFitnessCentres(places);
@@ -65,17 +84,20 @@ const FitFinder = () => {
 
   return (
     <div className="container">
-      <h1 className="display-4">FitFinder</h1>
+      <h1 className="display-4">FitFinder <span className="badge badge-secondary" style={{fontSize: '25px', verticalAlign: 'top'}}>Beta</span></h1>
+      
+      <p className="font-italic">Locate fitness centers around you...</p>
       <hr style={{ color: grey, backgroundColor: grey, height: 5}} />
       <div className="row">
         <div className="col-sm-4">
           <div className="">
             <label htmlFor="search" className="">Search by location</label>
             <div className="form-inline">
-            <input type="text" className="form-control w-50 mr-2" id="search" placeholder="Enter location" onChange={handleLocationInput} />
+              <input type="text" className="form-control w-50 mr-2" id="search" placeholder="Enter location" onChange={handleLocationInput} />
   
               <button className="btn btn-primary btn-sm" onClick={() => handleLocationSearch()}>Use location</button>
-              </div>
+            </div>
+            <small id="" className="text-muted font-italic">For now we generate dummy centres when you click the button</small>
           </div>
           
           <div className="mt-4">
@@ -100,6 +122,7 @@ const FitFinder = () => {
             </div>
           </div>
 
+          {/* Results from button click */}
           <div className="mt-4">
             {
               fitnessCentres ? <div>
@@ -121,6 +144,8 @@ const FitFinder = () => {
             </div>
 
         </div>
+
+        {/* Map is renderd here when location exists */}
         <div className="col-sm-8 map-div">
           {
             location ? <Map
