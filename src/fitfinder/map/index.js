@@ -3,8 +3,9 @@ import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 
 const MapContainer = props => {
   const { google, location } = props;
-  // Testing for when search is implemented
+  
   if (props.search) {
+    // When search is implemented
     const onMapReady = (mapProps, map) => {
       console.log('mpaProps', mapProps, '\nmap', map)
       searchLocation(map, map.center);
@@ -28,9 +29,8 @@ const MapContainer = props => {
         onReady={onMapReady}
       />
     )
-  }
-  // When user has selected a single place
-  else if (props.place) {
+  } else if (props.place) {
+    // When user has selected a single place
     return (
       <Map
         google={google}
@@ -49,9 +49,8 @@ const MapContainer = props => {
         </InfoWindow>
       </Map>
     ); 
-  }
-  // When user has not yet searched for a place
-  else if (location && !props.places) {
+  } else if (location && !props.places) {
+    // When user has not yet searched for a place
     return (
       <Map
         google={props.google}
@@ -61,9 +60,8 @@ const MapContainer = props => {
       >
       </Map>
     );
-  }
+  } else {
     // When user is searching for centres
-  else {
     return (
       <Map
         google={props.google}

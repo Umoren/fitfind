@@ -25,7 +25,7 @@ const FitFinder = () => {
   useEffect(() => {
     // check if browser has navigator api
     if (navigator && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((pos) => {
+      navigator.geolocation.getCurrentPosition(pos => {
         // Get location from browser
         const location = {
           lat: pos.coords.latitude,
@@ -33,7 +33,7 @@ const FitFinder = () => {
         };
         // Update location state
         setLocation(location);
-      })
+      });
     } else {
       // Browser does not support navigation
       // Set custom location (Accra Mall)
