@@ -14,10 +14,11 @@ const FitFinder = () => {
   const [fitnessCentres, setFitnessCentres] = useState(places);
   // Hold filter conditions in state
   const [filters, setFilters] = useState({
-    hasGym: true,
+    hasGym: false,
     hasSwimmingPool: false,
     hasTennisCourt: false
   });
+
   // Hold selected fitness centre in state
   const [fitnessCentre, setFitnessCentre] = useState(null);
 
@@ -45,21 +46,23 @@ const FitFinder = () => {
     }
   }, []);
 
+  // Filter places when filter conditions change
+  useEffect(() => {
+    if (places) {
+      const filteredCentres = places.filter(place => {
+      return place.hasGym === filters.hasGym && place.hasSwimmingPool === filters.hasSwimmingPool && place.hasTennisCourt === filters.hasTennisCourt
+    });
+      setFitnessCentres(filteredCentres);
+    }
+  }, [filters, places]);
+
   // Handle filter input checkbox changes
   const handleFilter = e => {
+    // console.log('name', e.target.name, '\nchecked?', e.target.checked);
     setFilters({
       ...filters,
       [e.target.name]: e.target.checked
     });
-    filterPlaces();
-  }
-
-  // Filter places when filter conditions change
-  const filterPlaces = () => {
-    const filteredCentres = places.filter(place => {
-      return place.hasGym === filters.hasGym && place.hasSwimmingPool === filters.hasSwimmingPool && place.hasTennisCourt === filters.hasTennisCourt
-    });
-    setFitnessCentres(filteredCentres);
   }
 
   // Handle fitness centre selection
@@ -81,6 +84,7 @@ const FitFinder = () => {
     setPlaces(places);
     setFitnessCentres(places);
   }
+
 
   return (
     <div className="container">
