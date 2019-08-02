@@ -131,10 +131,11 @@ const FitFinder = () => {
           {/* Results from button click */}
           <div className="mt-4">
             <h4>Results</h4>
-            <SearchResults
-              handleCentreSelection={handleCentreSelection}
-              fitnessCentres={fitnessCentres}
-            />
+            
+                <SearchResults
+                  handleCentreSelection={handleCentreSelection}
+                  fitnessCentres={fitnessCentres}
+                />
             </div>
 
         </div>

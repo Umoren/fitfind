@@ -18,7 +18,7 @@ const SearchResults = props => {
       }
     </div>)
   } else {
-    return <div>There are no results for this search. Changing filters selections might help</div>
+    return <small id="" className="text-muted font-italic">Results will be listed here when they are available</small>
   }
   
 }

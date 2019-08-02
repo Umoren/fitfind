@@ -21,7 +21,7 @@ const generateCentres = location => {
       title: `Center ${String.fromCharCode(65 + index)}`,
       position: { lat: place.lat, lng: place.lng },
       hasSwimmingPool: Math.random() >= 0.5,
-      hasGym: true,
+      hasGym: Math.random() >= 0.5,
       hasTennisCourt: Math.random() >= 0.5,
       address: `${1 + index} Test Street, Westerof`
     }
