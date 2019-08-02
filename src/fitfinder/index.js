@@ -3,6 +3,8 @@ import Map from './map';
 import { grey } from 'ansi-colors';
 import generateCentres from '../utils/generate-centres';
 
+import SearchResults from './search-results';
+
 const FitFinder = () => {
   // Hold location input in state
   const [locationInput, setLocationInput] = useState('');
@@ -128,23 +130,11 @@ const FitFinder = () => {
 
           {/* Results from button click */}
           <div className="mt-4">
-            {
-              fitnessCentres ? <div>
-                <h4>Results</h4>
-                {
-                  fitnessCentres.map(place => (
-                    <div className="card mb-2" style={{ width: "18rem" }} key={place.id}>
-                      <div className="card-body" onClick={() => handleCentreSelection(place.id)}>
-                        <h5 className="card-title">{place.title}</h5>
-                        <p className="card-text">{place.address}</p>
-                        <p className="card-text small text-muted">{`${place.hasGym ? 'Gym ' : ''}${place.hasSwimmingPool ? '| Swimming pool ' : ''}${place.hasTennisCourt ? '| Tennis court' : ''}`}</p>
-                      </div>
-                    </div>
-                  ))
-                }
-              </div> : ''
-            }
-            
+            <h4>Results</h4>
+            <SearchResults
+              handleCentreSelection={handleCentreSelection}
+              fitnessCentres={fitnessCentres}
+            />
             </div>
 
         </div>
